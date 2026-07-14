@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>工装项目全流程管理系统</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="redwood.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">工</span><div><strong>工装管家</strong><small>项目全流程管理</small></div></div>
+      <nav class="nav" aria-label="主菜单">
+        <button class="nav-item active" data-view="dashboard">⌂ <span>工作台</span></button>
+        <button class="nav-item" data-view="leads">◎ <span>线索跟进</span></button>
+        <button class="nav-item" data-view="projects">▣ <span>项目管理</span></button>
+        <button class="nav-item" data-view="workorders">⚒ <span>现场工单</span></button>
+        <button class="nav-item" data-view="labor">人 <span>人力日报</span></button>
+        <button class="nav-item" data-view="bom">≡ <span>BOM 台账</span></button>
+        <button class="nav-item" data-view="contracts">▤ <span>合同与回款</span></button>
+        <button class="nav-item" data-view="profit">▥ <span>利润看板</span></button>
+        <button class="nav-item" data-view="invoices">票 <span>发票台账</span></button>
+        <button class="nav-item" data-view="prices">￥ <span>材料与人工价格</span></button>
+      </nav>
+      <div class="sidebar-bottom"><button class="nav-item" data-view="settings">⚙ <span>系统设置</span></button><div class="profile"><span>团</span><div><strong>团光</strong><small>老板</small></div><i>⌄</i></div></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div><p id="breadcrumb">工作台</p><h1 id="page-title">早上好，王总</h1></div><div class="top-actions"><button class="icon-button" id="notify" aria-label="提醒中心">♧</button><button class="primary" id="new-action">＋ 新建线索</button></div></header>
+      <section id="view"></section>
+    </main>
+  </div>
+  <div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-card"><button class="close" data-close>×</button><h2 id="modal-title">新建线索</h2><form id="modal-form"></form></div></div>
+  <div class="toast hidden" id="toast"></div>
+  <script src="app.js"></script>
+  <script src="enterprise.js?v=2"></script>
+  <script src="ledger.js"></script>
+  <script src="followup.js"></script>
+  <script src="workflow.js"></script>
+  <script src="contractflow.js"></script>
+  <script src="compat.js"></script>
+  <script src="operations.js"></script>
+  <script src="leadcycle.js"></script>
+  <script src="dailywork.js"></script>
+  <script src="systemv2.js"></script>
+  <script src="versionguard.js"></script>
+  <script src="financev4.js"></script>
+  <script src="dashboardv5.js?v=2"></script>
+  <script src="optimizations.js?v=19"></script>
+  <script src="workordersv2.js?v=1"></script>
+  <script src="laborv2.js?v=5"></script>
+</body>
+</html>

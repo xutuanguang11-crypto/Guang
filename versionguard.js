@@ -1,0 +1,1 @@
+(async()=>{try{const health=await api('/api/health');if(!health.version){layout('<div class="card empty"><strong>当前连接的是旧版服务</strong><p>请关闭此页面，重新双击“ 双击启动系统.vbs ”，新版地址为 http://127.0.0.1:8902。</p></div>');$('#page-title').textContent='需要启动新版服务'}}catch(error){}})();
