@@ -1,0 +1,36 @@
+# Runtime business data and user uploads
+data/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Codex-generated working directories
+.agents/
+.codex/
+work/
+
+# Generated outputs; keep Markdown documentation
+outputs/*
+!outputs/*.md
+
+# Environment and local configuration
+.env
+.env.*
+!.env.example
+
+# Logs, temporary files, and local databases
+*.log
+*.tmp
+*.temp
+*.bak
+*.db
+*.db-shm
+*.db-wal
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
