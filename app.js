@@ -22,8 +22,9 @@ function render(view){state.view=view;$('#page-title').textContent=titles[view];
 document.querySelectorAll('[data-view]').forEach(x=>x.onclick=()=>render(x.dataset.view));document.addEventListener('click',e=>{const go=e.target.closest('[data-go]');if(go)render(go.dataset.go);if(e.target.matches('[data-close]'))closeModal()});$('#new-action').onclick=()=>state.view==='workorders'?openWorkModal():openLeadModal();$('#notify').onclick=()=>toast('提醒中心：6 条待办，其中 2 条需紧急处理');render('dashboard');
 
 // 后端数据接入：页面通过 server.py 提供的 REST API 读写 SQLite。
+const API_ORIGIN='https://zrylyjtbjhqffqggphad.supabase.co/functions/v1/project-api';
 async function api(path, options={}) {
-  const response = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options});
+  const response = await fetch(`${API_ORIGIN}${path}`, {headers:{'Content-Type':'application/json'}, ...options});
   const payload = await response.json();
   if (!response.ok) throw new Error(payload.error || '请求失败');
   return payload;
