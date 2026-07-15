@@ -1,4 +1,4 @@
-const state={view:'dashboard',leads:[{name:'星河科技办公楼改造',customer:'深圳市星河科技有限公司',area:'860㎡',budget:'¥ 128 万',owner:'陈晓',stage:4,age:'谈判第 3 天'},{name:'远航律所办公室修缮',customer:'远航律师事务所',area:'180㎡',budget:'¥ 32 万',owner:'李敏',stage:3,age:'报价第 6 天'},{name:'岭南书店门店升级',customer:'岭南文化发展有限公司',area:'92㎡',budget:'¥ 18 万',owner:'陈晓',stage:1,age:'测绘第 2 天'}]};
+const state={view:'dashboard',leads:[]};
 const stages=['线索接入','现场测绘','方案出图','算量报价','商务谈判'];
 const $=s=>document.querySelector(s);const money=n=>'¥ '+Number(n).toLocaleString('zh-CN',{minimumFractionDigits:2});
 function toast(text){const e=$('#toast');e.textContent=text;e.classList.remove('hidden');setTimeout(()=>e.classList.add('hidden'),2200)}
@@ -16,17 +16,37 @@ function profit(){layout(`<div class="grid kpi-grid"><div class="card kpi"><p>�
 function settings(){layout(`<div class="card" style="padding:20px"><h2 style="margin-top:0;font-size:16px">系统参数</h2><div class="form-grid"><div class="field"><label>赢单审批阈值（元）</label><input value="50000" type="number" /></div><div class="field"><label>默认质保金比例</label><input value="5" type="number" /></div><div class="field"><label>线索接入超时（天）</label><input value="7" type="number" /></div><div class="field"><label>工单处理中超时（小时）</label><input value="48" type="number" /></div><div class="field full"><label>法定节假日配置</label><textarea rows="3" placeholder="例如：2026-10-01, 2026-10-02"></textarea></div></div><div class="form-actions"><button class="primary" id="save-settings">保存设置</button></div></div>`);$('#save-settings').onclick=()=>toast('系统参数已保存')}
 function openLeadModal(){openModal('新建线索',`<div class="form-grid"><div class="field full"><label>线索名称 *</label><input required name="name" placeholder="例如：XX 公司办公室改造" /></div><div class="field"><label>客户名称 *</label><input required name="customer" /></div><div class="field"><label>负责人 *</label><select name="owner"><option>陈晓</option><option>李敏</option></select></div><div class="field"><label>预计面积（㎡）</label><input name="area" type="number" /></div><div class="field"><label>预计预算（元）</label><input name="budget" type="number" /></div><div class="field full"><label>线索来源</label><select><option>客户转介绍</option><option>线上咨询</option><option>老客户复购</option><option>线下拜访</option></select></div></div><div class="form-actions"><button type="button" class="secondary" data-close>取消</button><button class="primary">创建线索</button></div>`,form=>{const d=new FormData(form);state.leads.unshift({name:d.get('name'),customer:d.get('customer'),area:(d.get('area')||'—')+'㎡',budget:money(d.get('budget')||0),owner:d.get('owner'),stage:0,age:'接入第 0 天'});closeModal();leads();toast('线索已创建，已进入线索接入阶段')})}
 function openWorkModal(){openModal('验收销账',`<div class="form-grid"><div class="field full"><label>验收结论 *</label><select name="result"><option value="pass">验收通过，销账</option><option value="return">验收不通过，退回处理</option></select></div><div class="field full"><label>销账照片 *</label><input name="photo" type="file" accept="image/*" required /></div><div class="field full"><label>验收备注</label><textarea name="note" rows="3" placeholder="填写验收情况"></textarea></div></div><div class="form-actions"><button type="button" class="secondary" data-close>取消</button><button class="primary">提交验收</button></div>`,()=>{closeModal();toast('工单已销账，验收锁定状态将自动刷新')})}
-function openModal(title,html,submit){$('#modal-title').textContent=title;const f=$('#modal-form');f.innerHTML=html;$('#modal').classList.remove('hidden');f.onsubmit=e=>{e.preventDefault();submit(f)};f.querySelectorAll('[data-close]').forEach(x=>x.onclick=closeModal)}function closeModal(){$('#modal').classList.add('hidden')}
-const views={dashboard,leads,projects,bom,workorders,labor,contracts,profit,settings};const titles={dashboard:'早上好，王总',leads:'线索跟进',projects:'项目管理',bom:'BOM 台账',workorders:'现场工单',labor:'人力日报',contracts:'合同与回款',profit:'利润看板',settings:'系统设置'};
-function render(view){state.view=view;$('#page-title').textContent=titles[view];$('#breadcrumb').textContent=view==='dashboard'?'工作台':'业务管理 / '+titles[view];document.querySelectorAll('.nav-item').forEach(x=>x.classList.toggle('active',x.dataset.view===view));views[view]();$('#new-action').textContent=view==='leads'?'＋ 新建线索':view==='workorders'?'＋ 拍照建单':'＋ 新建线索';}
+function openModal(title,html,submit){$('#modal-title').textContent=title;const f=$('#modal-form');f.innerHTML=html;$('#modal').classList.remove('hidden');f.onsubmit=async e=>{e.preventDefault();const button=f.querySelector('button[type="submit"],button.primary:not([data-close])');if(button?.disabled)return;const label=button?.textContent;if(button){button.disabled=true;button.textContent='处理中…'}try{await submit(f)}finally{if(button){button.disabled=false;button.textContent=label}}};f.querySelectorAll('[data-close]').forEach(x=>x.onclick=closeModal)}function closeModal(){$('#modal').classList.add('hidden')}
+const views={dashboard,leads,projects,bom,workorders,labor,contracts,profit,settings};
+views.dashboard=()=>layout('<div class="card empty">正在加载真实经营数据…</div>');
+const titles={dashboard:'早上好，团光',leads:'线索跟进',projects:'项目管理',bom:'BOM 台账',workorders:'现场工单',labor:'人力日报',contracts:'合同与回款',profit:'利润看板',settings:'系统设置'};
+function render(view){if(window.__appBooting){window.__bootView=view;return}state.view=view;$('#page-title').textContent=titles[view];$('#breadcrumb').textContent=view==='dashboard'?'工作台':'业务管理 / '+titles[view];document.querySelectorAll('.nav-item').forEach(x=>x.classList.toggle('active',x.dataset.view===view));views[view]();$('#new-action').textContent=view==='leads'?'＋ 新建线索':view==='workorders'?'＋ 拍照建单':'＋ 新建线索';}
 document.querySelectorAll('[data-view]').forEach(x=>x.onclick=()=>render(x.dataset.view));document.addEventListener('click',e=>{const go=e.target.closest('[data-go]');if(go)render(go.dataset.go);if(e.target.matches('[data-close]'))closeModal()});$('#new-action').onclick=()=>state.view==='workorders'?openWorkModal():openLeadModal();$('#notify').onclick=()=>toast('提醒中心：6 条待办，其中 2 条需紧急处理');render('dashboard');
 
 // 后端数据接入：页面通过 server.py 提供的 REST API 读写 SQLite。
+const API_ORIGIN=window.API_ORIGIN||'https://zrylyjtbjhqffqggphad.supabase.co/functions/v1/project-api';
+const apiCache=new Map(),apiInflight=new Map();let apiCacheGeneration=0;
+function invalidateApiCache(){apiCacheGeneration++;apiCache.clear()}
 async function api(path, options={}) {
-  const response = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options});
-  const payload = await response.json();
-  if (!response.ok) throw new Error(payload.error || '请求失败');
-  return payload;
+  const method=String(options.method||'GET').toUpperCase(),cacheKey=path,cached=apiCache.get(cacheKey);
+  if(method==='GET'&&cached&&cached.expires>Date.now())return cached.value;
+  if(method==='GET'&&apiInflight.has(cacheKey))return apiInflight.get(cacheKey);
+  const generation=apiCacheGeneration;
+  const request=(async()=>{
+    const token = await window.getAuthAccessToken?.();
+    if (!token) throw new Error('请先登录');
+    const response = await fetch(`${API_ORIGIN}${path}`, {
+      ...options,
+      headers:{'Content-Type':'application/json',...(options.headers||{}),Authorization:`Bearer ${token}`},
+    });
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.error || '请求失败');
+    if(method==='GET'&&generation===apiCacheGeneration)apiCache.set(cacheKey,{value:payload,expires:Date.now()+15000});
+    if(method!=='GET')invalidateApiCache();
+    return payload;
+  })();
+  if(method==='GET')apiInflight.set(cacheKey,request);
+  try{return await request}finally{if(method==='GET')apiInflight.delete(cacheKey)}
 }
 function formatLead(item) {
   const started = new Date(item.stage_since);

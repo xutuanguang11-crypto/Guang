@@ -4,8 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>工装项目全流程管理系统</title>
+  <link rel="preconnect" href="https://zrylyjtbjhqffqggphad.supabase.co" crossorigin />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="redwood.css" />
+  <style>
+    #auth-screen{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#f4f1eb;pointer-events:auto}.auth-locked{visibility:hidden}#auth-screen.hidden{display:none}.auth-card{position:relative;z-index:1;width:min(420px,calc(100vw - 40px));box-sizing:border-box;padding:42px;border:1px solid #ded8cf;border-radius:22px;background:#fff;box-shadow:0 24px 70px rgba(40,32,26,.12)}.auth-mark{display:grid;width:58px;height:58px;place-items:center;border-radius:14px;background:#c64a30;color:#fff;font-size:30px;font-weight:700}.auth-card h1{margin:28px 0 8px;font-size:30px}.auth-card p{margin:0 0 30px;color:#766d66}.auth-card label{display:grid;gap:8px;margin:18px 0;font-size:15px}.auth-card input{position:relative;z-index:2;box-sizing:border-box;width:100%;padding:12px 14px;border:1px solid #a9a29b;border-radius:7px;font:inherit;cursor:text;pointer-events:auto}.auth-card input:focus{border-color:#c64a30;outline:3px solid rgba(198,74,48,.22)}.auth-card button{width:100%;margin-top:10px;padding:13px;border:0;border-radius:7px;background:#cf4633;color:#fff;font-size:17px;font-weight:700}.auth-card button:disabled{opacity:.6}#auth-error{min-height:22px;color:#c9362b;font-size:14px}
+  </style>
 </head>
 <body>
   <div class="app-shell">
@@ -26,17 +30,19 @@
       <div class="sidebar-bottom"><button class="nav-item" data-view="settings">⚙ <span>系统设置</span></button><div class="profile"><span>团</span><div><strong>团光</strong><small>老板</small></div><i>⌄</i></div></div>
     </aside>
     <main class="main">
-      <header class="topbar"><div><p id="breadcrumb">工作台</p><h1 id="page-title">早上好，王总</h1></div><div class="top-actions"><button class="icon-button" id="notify" aria-label="提醒中心">♧</button><button class="primary" id="new-action">＋ 新建线索</button></div></header>
+      <header class="topbar"><div><p id="breadcrumb">工作台</p><h1 id="page-title">早上好，团光</h1></div><div class="top-actions"><button class="icon-button" id="notify" aria-label="提醒中心">♧</button><button class="primary" id="new-action">＋ 新建线索</button></div></header>
       <section id="view"></section>
     </main>
   </div>
   <div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-card"><button class="close" data-close>×</button><h2 id="modal-title">新建线索</h2><form id="modal-form"></form></div></div>
   <div class="toast hidden" id="toast"></div>
-  <script src="app.js"></script>
+  <script>window.__appBooting=true;window.API_ORIGIN='https://zrylyjtbjhqffqggphad.supabase.co/functions/v1/project-api';</script>
+  <script src="auth.js?v=9"></script>
+  <script src="app.js?v=4"></script>
   <script src="enterprise.js?v=2"></script>
   <script src="ledger.js"></script>
   <script src="followup.js"></script>
-  <script src="workflow.js"></script>
+  <script src="workflow.js?v=2"></script>
   <script src="contractflow.js"></script>
   <script src="compat.js"></script>
   <script src="operations.js"></script>
@@ -46,8 +52,10 @@
   <script src="versionguard.js"></script>
   <script src="financev4.js"></script>
   <script src="dashboardv5.js?v=2"></script>
-  <script src="optimizations.js?v=19"></script>
+  <script src="optimizations.js?v=20"></script>
   <script src="workordersv2.js?v=1"></script>
   <script src="laborv2.js?v=5"></script>
+  <script src="rbac.js?v=3"></script>
+  <script>window.authReady.then(user=>{if(user){window.__appBooting=false;requestAnimationFrame(()=>requestAnimationFrame(()=>render(window.__bootView||'dashboard')))}});</script>
 </body>
 </html>
